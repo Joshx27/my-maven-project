@@ -3,6 +3,7 @@ package com.example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.RecursiveTask;
 
 class Edge implements Comparable<Edge> {
     int to, weight;
@@ -26,20 +27,28 @@ public class PrimsParallelMST {
         boolean[] visited = new boolean[numVertices];
         PriorityQueue<Edge> priorityQueue = new PriorityQueue<>();
 
-        // Start with the first vertex (vertex 0)
+        // Add edges for vertex 0 to the priority queue
         visited[0] = true;
-
         for (Edge edge : graph.get(0)) {
             priorityQueue.add(edge);
         }
 
-        while (minimumSpanningTree.size() < numVertices - 1) {
-            Edge minEdge = priorityQueue.poll();
-            int to = minEdge.to;
-
-            if (visited[to]) {
-                continue;
+        // Add all other edges to the priority queue
+        for (int i = 1; i < numVertices; i++) {
+            for (Edge edge : graph.get(i)) {
+                priorityQueue.add(edge);
             }
+        }
+
+        while (minimumSpanningTree.size() < numVertices - 1) {
+            Edge minEdge = findMinimumEdge(graph, visited, priorityQueue);
+
+            if (minEdge == null) {
+                // Handle the case where no minimum edge was found
+                break;
+            }
+
+            int to = minEdge.to;
 
             visited[to] = true;
             minimumSpanningTree.add(minEdge);
@@ -52,6 +61,51 @@ public class PrimsParallelMST {
         }
 
         return minimumSpanningTree;
+    }
+
+    private static Edge findMinimumEdge(List<List<Edge>> graph, boolean[] visited, PriorityQueue<Edge> priorityQueue) {
+        if (priorityQueue.isEmpty()) {
+            // Handle the case where the queue is empty
+            return null; // You can return null or throw an exception, depending on your requirements
+        }
+        // Parallelize the process of finding the minimum weighted edge
+        return new FindMinimumEdgeTask(graph, visited, priorityQueue, 0, priorityQueue.size()).invoke();
+    }
+
+    private static class FindMinimumEdgeTask extends RecursiveTask<Edge> {
+        private List<List<Edge>> graph;
+        private boolean[] visited;
+        private PriorityQueue<Edge> priorityQueue;
+        private int start;
+        private int end;
+
+        public FindMinimumEdgeTask(List<List<Edge>> graph, boolean[] visited, PriorityQueue<Edge> priorityQueue,
+                int start, int end) {
+            this.graph = graph;
+            this.visited = visited;
+            this.priorityQueue = priorityQueue;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        protected Edge compute() {
+            if (end - start <= 1) {
+                return priorityQueue.poll();
+            } else {
+                int middle = start + (end - start) / 2;
+
+                FindMinimumEdgeTask leftTask = new FindMinimumEdgeTask(graph, visited, priorityQueue, start, middle);
+                FindMinimumEdgeTask rightTask = new FindMinimumEdgeTask(graph, visited, priorityQueue, middle, end);
+
+                invokeAll(leftTask, rightTask);
+
+                Edge leftMin = leftTask.join();
+                Edge rightMin = rightTask.join();
+
+                return (leftMin.compareTo(rightMin) < 0) ? leftMin : rightMin;
+            }
+        }
     }
 
     public static void main(String[] args) {
