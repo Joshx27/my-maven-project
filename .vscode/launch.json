@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ParallelPrefix",
+      "request": "launch",
+      "mainClass": "com.example.ParallelPrefix",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
       "name": "PrimsParallelMST",
       "request": "launch",
       "mainClass": "com.example.PrimsParallelMST",
