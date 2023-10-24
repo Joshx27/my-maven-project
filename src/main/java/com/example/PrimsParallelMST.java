@@ -109,7 +109,7 @@ public class PrimsParallelMST {
     }
 
     public static void main(String[] args) {
-        int numVertices = 4;
+        int numVertices = 5;
         List<List<Edge>> graph = new ArrayList<>();
 
         for (int i = 0; i < numVertices; i++) {
@@ -117,12 +117,16 @@ public class PrimsParallelMST {
         }
 
         // Add edges to the graph
-        graph.get(0).add(new Edge(1, 2));
-        graph.get(1).add(new Edge(0, 2));
-        graph.get(1).add(new Edge(2, 3));
-        graph.get(2).add(new Edge(1, 3));
-        graph.get(0).add(new Edge(3, 4));
-        graph.get(3).add(new Edge(0, 4));
+        graph.get(0).add(new Edge(1, 1));
+        graph.get(1).add(new Edge(0, 1));
+        graph.get(1).add(new Edge(2, 2));
+        graph.get(2).add(new Edge(1, 2));
+        graph.get(2).add(new Edge(3, 3));
+        graph.get(3).add(new Edge(2, 3));
+        graph.get(3).add(new Edge(4, 4));
+        graph.get(4).add(new Edge(3, 4));
+        graph.get(0).add(new Edge(4, 5));
+        graph.get(4).add(new Edge(0, 5));
 
         List<Edge> minimumSpanningTree = primMST(graph);
 
@@ -131,5 +135,4 @@ public class PrimsParallelMST {
             System.out.println("(to: " + edge.to + ", weight: " + edge.weight + ")");
         }
     }
-
 }
