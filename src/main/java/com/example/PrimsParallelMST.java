@@ -66,7 +66,7 @@ public class PrimsParallelMST {
     private static Edge findMinimumEdge(List<List<Edge>> graph, boolean[] visited, PriorityQueue<Edge> priorityQueue) {
         if (priorityQueue.isEmpty()) {
             // Handle the case where the queue is empty
-            return null; // You can return null or throw an exception, depending on your requirements
+            return null;
         }
         // Parallelize the process of finding the minimum weighted edge
         return new FindMinimumEdgeTask(graph, visited, priorityQueue, 0, priorityQueue.size()).invoke();
