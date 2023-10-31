@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "PrimMSTConcurrent",
+      "request": "launch",
+      "mainClass": "com.example.PrimMSTConcurrent",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
       "name": "ParallelPrefix",
       "request": "launch",
       "mainClass": "com.example.ParallelPrefix",
