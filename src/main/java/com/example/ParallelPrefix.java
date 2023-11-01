@@ -13,6 +13,7 @@ public class ParallelPrefix {
 
         ExecutorService executor = Executors.newFixedThreadPool(n);
         List<Future<Integer>> futures = new ArrayList<>();
+        CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
 
         for (int i = 1; i < n; i++) {
             final int currentIndex = i;
@@ -20,12 +21,14 @@ public class ParallelPrefix {
                 output[currentIndex] = input[currentIndex] + output[currentIndex - 1];
                 return output[currentIndex];
             };
-            futures.add(executor.submit(task));
+            futures.add(completionService.submit(task));
         }
 
-        for (Future<Integer> future : futures) {
+        // Wait for tasks to complete and retrieve results in order
+        for (int i = 0; i < n - 1; i++) {
             try {
-                future.get(); // Wait for tasks to complete
+                Future<Integer> future = completionService.take();
+                future.get(); // Ensure task is completed
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
