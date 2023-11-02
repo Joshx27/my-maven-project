@@ -6,6 +6,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MST",
+      "request": "launch",
+      "mainClass": "com.example.MST",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
+      "name": "ParallelMSTConcurrent",
+      "request": "launch",
+      "mainClass": "com.example.ParallelMSTConcurrent",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
+      "name": "ParallelMST",
+      "request": "launch",
+      "mainClass": "com.example.ParallelMST",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
+      "name": "LLPScanParallel",
+      "request": "launch",
+      "mainClass": "com.example.LLPScanParallel",
+      "projectName": "my-maven-project"
+    },
+    {
+      "type": "java",
       "name": "PrimMSTConcurrent",
       "request": "launch",
       "mainClass": "com.example.PrimMSTConcurrent",

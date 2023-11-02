@@ -1,8 +1,10 @@
 package com.example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.IntBinaryOperator;
 
 public class ParallelPrefix {
 
@@ -38,10 +40,16 @@ public class ParallelPrefix {
         return output;
     }
 
+    public static int[] parallelPrefix(int[] input) {
+        IntBinaryOperator op = (x, y) -> x + y;
+        Arrays.parallelPrefix(input, op);
+        return input;
+    }
+
     public static void main(String[] args) {
         int[] inputArray = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-        int[] result = parallelPrefixSum(inputArray);
+        int[] result = parallelPrefix(inputArray);
 
         System.out.println("Input Array: ");
         for (int num : inputArray) {
